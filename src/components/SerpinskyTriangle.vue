@@ -8,6 +8,7 @@
         </template>
         <template v-else>See the magic</template>
       </p>
+      <!-- TODO add slider with data: [slow, normal, fast, super fast] -->
       <div>
         <!-- <v-btn @click="start" :disabled="!isDataFilled" class="mr-2">Start</v-btn> -->
         <v-btn @click="clear" :disabled="!points.length">Clear</v-btn>
