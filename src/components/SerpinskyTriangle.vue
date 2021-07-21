@@ -3,12 +3,14 @@
     <div class="settings">
       <p class="description">
         <template v-if="points.length < 3">Set 3 coordinates on canvas</template>
-        <template v-else-if="points.length === 3 && !isDataFilled">Set start coordinate</template>
+        <template v-else-if="points.length === 3 && !isDataFilled">
+          Set start coordinate and see the magic
+        </template>
         <template v-else>See the magic</template>
       </p>
       <div>
-        <v-btn @click="start" :disabled="!isDataFilled" class="mr-2">Start</v-btn>
-        <!-- <v-btn @click="clear" :disabled="isDataFilled">Clear</v-btn> -->
+        <!-- <v-btn @click="start" :disabled="!isDataFilled" class="mr-2">Start</v-btn> -->
+        <v-btn @click="clear" :disabled="!points.length">Clear</v-btn>
       </div>
     </div>
     <canvas
@@ -33,9 +35,11 @@ import useMouseEvent from '@/composables/useMouseEvent';
 export default defineComponent({
   name: 'App',
   setup() {
-    const { canvas, context, fillPoint } = useCanvas();
     const {
-      points, addPoint, isDataFilled, drawPoints,
+      canvas, context, fillPoint, clearCanvas,
+    } = useCanvas();
+    const {
+      points, addPoint, isDataFilled, clearPoints,
     } = useSerpinskyTriangle(context);
     const { coordinates, onMousemove } = useMouseEvent();
 
@@ -46,21 +50,18 @@ export default defineComponent({
       }
     };
 
-    const start = () => {
-      drawPoints();
-    };
-
     const clear = () => {
-
+      clearCanvas();
+      clearPoints();
     };
 
     return {
       canvas,
       points,
       isDataFilled,
-      start,
       onMousemove,
       onCanvasClick,
+      clear,
     };
   },
 });
@@ -84,6 +85,6 @@ export default defineComponent({
 }
 
 #canvas {
-  border: 1px solid rgb(145, 145, 145);
+  background: #eee;
 }
 </style>

@@ -10,8 +10,9 @@ export default function ususeSerpinskyTriangleeCanvas(context) {
     () => points.value.length === 3 && Object.keys(startPoint.value).length,
   );
 
+  let drawProcessing = null;
   const drawPoints = () => {
-    setInterval(() => {
+    drawProcessing = setInterval(() => {
       const ramdomValue = getRandomIntInclusive(1, points.value.length);
       const findPoint = points.value
         .find((el, index) => index + 1 === ramdomValue);
@@ -21,10 +22,7 @@ export default function ususeSerpinskyTriangleeCanvas(context) {
         y: Math.abs((startPoint.value.y + findPoint.y) / 2),
       };
 
-      fillPoint({
-        coordinates: middlePoint,
-        radius: 1,
-      });
+      fillPoint({ coordinates: middlePoint });
 
       startPoint.value.x = middlePoint.x;
       startPoint.value.y = middlePoint.y;
@@ -36,13 +34,20 @@ export default function ususeSerpinskyTriangleeCanvas(context) {
       points.value.push(coordinates);
     } else {
       startPoint.value = coordinates;
+      drawPoints();
     }
+  };
+
+  const clearPoints = () => {
+    points.value = [];
+    startPoint.value = {};
+    clearInterval(drawProcessing);
   };
 
   return {
     points,
     addPoint,
     isDataFilled,
-    drawPoints,
+    clearPoints,
   };
 }
